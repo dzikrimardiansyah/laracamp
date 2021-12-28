@@ -21,6 +21,7 @@ class CreateCamps extends Migration
             $table->integer('price')->unsigned();
             $table->timestamps();
             $table->softDeletes();
+            
         });
     }
 
