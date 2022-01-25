@@ -36,12 +36,12 @@ Route::get('success_checkout', function () {
 Route::get('sign-in-google',[UserController::class,'google'])->name('user.login.google');
 Route::get('/auth/google/callback',[UserController::class,'handleProviderCallback'])->name('user.google.callback');
 
-Route::get('dashboard', [HomeController::class,'dashboard'])->name('dashboard');
+// Route::get('dashboard', [HomeController::class,'dashboard'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
-    Route::get('checkout/{camps:slug}', [CheckoutController::class, 'create'])->name('checkout.create');
-    Route::post('checkout/{camps}', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('checkout/{camp:slug}', [CheckoutController::class, 'create'])->name('checkout.create');
+    Route::post('checkout/{camp}', [CheckoutController::class, 'store'])->name('checkout.store');
 
     Route::get('dashboard', [HomeController::class,'dashboard'])->name('dashboard');
     

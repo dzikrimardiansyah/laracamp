@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 
-class Checkouts extends Model
+class Checkout extends Model
 {
     use HasFactory, SoftDeletes;
 
