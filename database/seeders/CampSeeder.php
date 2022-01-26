@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Camps;
+use App\Models\Camp;
 
 class CampSeeder extends Seeder
 {
@@ -33,7 +33,7 @@ class CampSeeder extends Seeder
                 ],
 
         ];
-            Camps::insert($camp);
+            Camp::insert($camp);
         }
     }
 
