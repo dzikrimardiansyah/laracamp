@@ -30,7 +30,7 @@
                                 <strong>{{$checkout->Camp->title}}</strong>
                             </p>
                             <p>
-                                {{$checkout->created_at}}
+                                {{$checkout->created_at->format('M d, Y')}}
                             </p>
                         </td>
                         <td>
