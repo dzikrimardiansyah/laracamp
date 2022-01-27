@@ -42,8 +42,8 @@ Route::get('success_checkout', function () {
 Route::get('sign-in-google',[UserController::class,'google'])->name('user.login.google');
 Route::get('/auth/google/callback',[UserController::class,'handleProviderCallback'])->name('user.google.callback');
 
-Route::get('payment/success',[UserController::class, 'midtransCallback']);
-Route::post('payment/success',[UserController::class, 'midtransCallback']);
+Route::get('payment/success',[CheckoutController::class, 'midtransCallback']);
+Route::post('payment/success',[CheckoutController::class, 'midtransCallback']);
 
 
 // Route::get('dashboard', [HomeController::class,'dashboard'])->name('dashboard');

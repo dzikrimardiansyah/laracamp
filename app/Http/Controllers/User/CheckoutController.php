@@ -75,6 +75,9 @@ class CheckoutController extends Controller
         $user->email = $data['email'];
         $user->name = $data ['name'];
         $user->occupation = $data['occupation'];
+        $user->phone = $data['phone'];
+        $user->address = $data['address'];
+
         $user->save();
 
         //create checkout
@@ -144,15 +147,15 @@ class CheckoutController extends Controller
     {
         $orderId = $checkouts->id.'-'.Str::random(5);
         $price =  $checkouts->Camp->price * 1000;
-        $checkouts->midtrans_booking_code = $checkouts->id.'-'.Str::random(5);
+        $checkouts->midtrans_booking_code = $orderId;
 
         $transaction_details = [
             'order_id' => $orderId,
-            'gross_amount' => $price,
+            'gross_amount' => $price
 
         ];
         
-        $item_details = [
+        $item_details [] = [
             'id' => $orderId,
             'price' => $price,
             'quantity' => 1,
@@ -180,7 +183,7 @@ class CheckoutController extends Controller
         ];
 
         $midtrans_params = [
-            'transaction_detail' => $transaction_details,
+            'transaction_details' => $transaction_details,
             'customer_details' => $customer_details,
             'item_details' => $item_details,
             
@@ -188,7 +191,7 @@ class CheckoutController extends Controller
 
         try {
             //get snap payment page url
-            $paymentUrl = \Midtrans\Snap::createTransaction($params)->redirect_url;
+            $paymentUrl = \Midtrans\Snap::createTransaction($midtrans_params)->redirect_url;
             $checkouts->midtrans_url = $paymentUrl;
             $checkouts->save();
             return $paymentUrl;
@@ -208,46 +211,46 @@ class CheckoutController extends Controller
         $fraud = $notif->fraud_status;
 
         $checkout_id = explode('-', $notif->order_id)[0];
-        $checkout = Checkout::find($checkout_id);
+        $checkouts = Checkout::find($checkout_id);
 
         if ($transaction_status == 'capture') {
             if ($fraud == 'challenge') {
                 // TODO Set payment status in merchant's database to 'challenge'
-                $checkout->payment_status = 'pending';
+                $checkouts->payment_status = 'pending';
             }
             else if ($fraud == 'accept') {
                 // TODO Set payment status in merchant's database to 'success'
-                $checkout->payment_status = 'paid';
+                $checkouts->payment_status = 'paid';
             }
         }
         else if ($transaction_status == 'cancel') {
             if ($fraud == 'challenge') {
                 // TODO Set payment status in merchant's database to 'failure'
-                $checkout->payment_status = 'failed';
+                $checkouts->payment_status = 'failed';
             }
             else if ($fraud == 'accept') {
                 // TODO Set payment status in merchant's database to 'failure'
-                $checkout->payment_status = 'failed';
+                $checkouts->payment_status = 'failed';
             }
         }
         else if ($transaction_status == 'deny') {
             // TODO Set payment status in merchant's database to 'failure'
-            $checkout->payment_status = 'failed';
+            $checkouts->payment_status = 'failed';
         }
         else if ($transaction_status == 'settlement') {
             // TODO set payment status in merchant's database to 'Settlement'
-            $checkout->payment_status = 'paid';
+            $checkouts->payment_status = 'paid';
         }
         else if ($transaction_status == 'pending') {
             // TODO set payment status in merchant's database to 'Pending'
-            $checkout->payment_status = 'pending';
+            $checkouts->payment_status = 'pending';
         }
         else if ($transaction_status == 'expire') {
             // TODO set payment status in merchant's database to 'expire'
-            $checkout->payment_status = 'failed';
+            $checkouts->payment_status = 'failed';
         }
 
-        $checkout->save();
+        $checkouts->save();
         return view('checkout/success');
     }
 
