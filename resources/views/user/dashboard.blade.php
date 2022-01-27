@@ -37,14 +37,14 @@
                             <strong>{{$checkout->Camp->price}}</strong>
                         </td>
                         <td>
-                              
-                            @if ($checkout->id_paid)
-                                <strong class="text-success">Payment Success</strong>
-                            @else
-                                <strong>Waiting For Payment</strong>
+                            <strong>{{$checkout->payment_status}}</strong>
+                            
+                        </td>
+                        <td>
+                            @if ($checkout->payment_status == 'waiting')
+                            <a href="{{$checkout->midtrans_url}}" class="btn btn-primary">Pay here</a>
+                                
                             @endif
-                            
-                            
                         </td>
                         <td>
                             <a href="https://wa.me/088808474949?text=hi, saya ingin bertanya tentang kelas {{$checkout->Camp->title}}" class="btn btn-primary">
@@ -55,7 +55,7 @@
                     @empty
                     <tr>
                     <td colspan="5">
-                        <h3>No Data</h3>
+                        <h3>No Camp Registered</h3>
                     </td>
                 </tr>
                     @endforelse
